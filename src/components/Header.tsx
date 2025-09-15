@@ -19,7 +19,7 @@ const Header: React.FC<HeaderProps> = ({
   const translations = {
     en: { title: "FarmAI Assistant", offline: "Offline Mode", online: "Online" },
     hi: { title: "फार्म AI सहायक", offline: "ऑफलाइन मोड", online: "ऑनलाइन" },
-    te: { title: "వ్యవసాయ AI సహాయకుడు", offline: "ఆఫ్‌లైన్ మోడ్", online: "ఆన్‌లైన్" }
+    pa: { title: "ਫਾਰਮ AI ਸਹਾਇਕ", offline: "ਆਫਲਾਈਨ ਮੋਡ", online: "ਆਨਲਾਈਨ" }
   };
 
   const t = translations[language as keyof typeof translations] || translations.en;
@@ -53,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({
             >
               <option value="en">English</option>
               <option value="hi">हिन्दी</option>
-              <option value="te">తెలుగు</option>
+              <option value="pa">ਪੰਜਾਬੀ</option>
             </select>
           </div>
         </div>

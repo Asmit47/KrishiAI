@@ -44,14 +44,14 @@ const Sidebar: React.FC<SidebarProps> = ({
       soilAnalysis: "मिट्टी विश्लेषण",
       marketPrices: "बाजार भाव"
     },
-    te: {
-      dashboard: "డాష్‌బోర్డ్",
-      diseaseDetection: "వ్యాధి గుర్తింపు",
-      chatAssistant: "చాట్ సహాయకుడు",
-      cropRecommendations: "పంట సిఫార్సులు",
-      weather: "వాతావరణం",
-      soilAnalysis: "నేల విశ్లేషణ",
-      marketPrices: "మార్కెట్ ధరలు"
+    pa: {
+      dashboard: "ਡੈਸ਼ਬੋਰਡ",
+      diseaseDetection: "ਬਿਮਾਰੀ ਪਛਾਣ",
+      chatAssistant: "ਚੈਟ ਸਹਾਇਕ",
+      cropRecommendations: "ਫਸਲ ਸਿਫਾਰਸ਼ਾਂ",
+      weather: "ਮੌਸਮ",
+      soilAnalysis: "ਮਿੱਟੀ ਵਿਸ਼ਲੇਸ਼ਣ",
+      marketPrices: "ਮਾਰਕੀਟ ਰੇਟ"
     }
   };
 

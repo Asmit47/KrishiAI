@@ -35,13 +35,13 @@ const ChatAssistant: React.FC<ChatAssistantProps> = ({ language }) => {
       typing: "AI टाइप कर रहा है...",
       welcomeMessage: "नमस्ते! मैं आपका AI खेती सहायक हूँ। मैं फसल की बीमारियों, मिट्टी के स्वास्थ्य, मौसम की सलाह और खेती की बेहतर प्रथाओं में आपकी मदद कर सकता हूँ। आप क्या जानना चाहते हैं?"
     },
-    te: {
-      title: "AI చాట్ సహాయకుడు",
-      subtitle: "వ్యవసాయం, పంటలు మరియు వ్యవసాయ పద్ధతుల గురించి ఏదైనా అడగండి",
-      placeholder: "మీ వ్యవసాయ ప్రశ్నను టైప్ చేయండి...",
-      send: "పంపండి",
-      typing: "AI టైప్ చేస్తోంది...",
-      welcomeMessage: "నమస్కారం! నేను మీ AI వ్యవసాయ సహాయకుడిని. పంట వ్యాధులు, మట్టి ఆరోగ్యం, వాతావరణ సలహాలు మరియు వ్యవసాయ ఉత్తమ పద్ధతులలో నేను మీకు సహాయం చేయగలను. మీరు ఏమి తెలుసుకోవాలనుకుంటున్నారు?"
+    pa: {
+      title: "AI ਚੈਟ ਸਹਾਇਕ",
+      subtitle: "ਖੇਤੀ, ਫਸਲਾਂ ਅਤੇ ਖੇਤੀਬਾੜੀ ਦੇ ਅਭਿਆਸਾਂ ਬਾਰੇ ਕੁਝ ਵੀ ਪੁੱਛੋ",
+      placeholder: "ਆਪਣਾ ਖੇਤੀ ਦਾ ਸਵਾਲ ਟਾਈਪ ਕਰੋ...",
+      send: "ਭੇਜੋ",
+      typing: "AI ਟਾਈਪ ਕਰ ਰਿਹਾ ਹੈ...",
+      welcomeMessage: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ ਤੁਹਾਡਾ AI ਖੇਤੀ ਸਹਾਇਕ ਹਾਂ। ਮੈਂ ਫਸਲਾਂ ਦੀਆਂ ਬਿਮਾਰੀਆਂ, ਮਿੱਟੀ ਦੀ ਸਿਹਤ, ਮੌਸਮ ਦੀ ਸਲਾਹ ਅਤੇ ਖੇਤੀਬਾੜੀ ਦੇ ਵਧੀਆ ਤਰੀਕਿਆਂ ਵਿੱਚ ਤੁਹਾਡੀ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ। ਤੁਸੀਂ ਕੀ ਜਾਣਨਾ ਚਾਹੁੰਦੇ ਹੋ?"
     }
   };
 
@@ -51,35 +51,35 @@ const ChatAssistant: React.FC<ChatAssistantProps> = ({ language }) => {
   const generateResponse = (userMessage: string): string => {
     const message = userMessage.toLowerCase();
     
-    if (message.includes('disease') || message.includes('रोग') || message.includes('వ్యాధి')) {
+    if (message.includes('disease') || message.includes('रोग') || message.includes('ਬਿਮਾਰੀ')) {
       return language === 'hi' 
         ? "पौधों की बीमारियों के लिए, सबसे पहले प्रभावित पत्तियों को हटाएं। कॉपर सल्फेट या जैविक कवकनाशी का उपयोग करें। पौधों के बीच अच्छी हवा का संचार सुनिश्चित करें।"
-        : language === 'te'
-        ? "మొక్కల వ్యాధుల కోసం, మొదట ప్రభావిత ఆకులను తొలగించండి. కాపర్ సల్ఫేట్ లేదా జైవిక శిలీంద్రనाశిని ఉపయోగించండి. మొక్కల మధ్య మంచి గాలి ప్రసరణను నిర్ధారించండి."
+        : language === 'pa'
+        ? "ਪੌਧਿਆਂ ਦੀਆਂ ਬਿਮਾਰੀਆਂ ਲਈ, ਪਹਿਲਾਂ ਪ੍ਰਭਾਵਿਤ ਪੱਤਿਆਂ ਨੂੰ ਹਟਾਓ। ਕਾਪਰ ਸਲਫੇਟ ਜਾਂ ਜੈਵਿਕ ਫੰਗੀਸਾਈਡ ਦੀ ਵਰਤੋਂ ਕਰੋ। ਪੌਧਿਆਂ ਵਿਚਕਾਰ ਚੰਗੀ ਹਵਾ ਦਾ ਸੰਚਾਰ ਯਕੀਨੀ ਬਣਾਓ।"
         : "For plant diseases, first remove affected leaves. Use copper sulfate or organic fungicides. Ensure good air circulation between plants and avoid overhead watering.";
     }
     
-    if (message.includes('soil') || message.includes('मिट्टी') || message.includes('మట్టి')) {
+    if (message.includes('soil') || message.includes('मिट्टी') || message.includes('ਮਿੱਟੀ')) {
       return language === 'hi'
         ? "मिट्टी की जाँच नियमित रूप से करें। pH 6.0-7.0 के बीच रखें। जैविक खाद का उपयोग करें और फसल चक्र अपनाएं। पानी की निकासी का भी ध्यान रखें।"
-        : language === 'te'
-        ? "మట్టిని క్రమం తప్పకుండా పరీక్షించండి. pH 6.0-7.0 మధ్య ఉంచండి. జైవిక ఎరువులు ఉపయోగించండి మరియు పంట మార్పిడిని అనుసరించండి. నీటి పారుదల కూడా జాగ్రత్తగా చూడండి."
+        : language === 'pa'
+        ? "ਮਿੱਟੀ ਦੀ ਨਿਯਮਿਤ ਜਾਂਚ ਕਰੋ। pH 6.0-7.0 ਦੇ ਵਿਚਕਾਰ ਰੱਖੋ। ਜੈਵਿਕ ਖਾਦ ਦੀ ਵਰਤੋਂ ਕਰੋ ਅਤੇ ਫਸਲ ਚੱਕਰ ਅਪਣਾਓ। ਪਾਣੀ ਦੀ ਨਿਕਾਸੀ ਦਾ ਵੀ ਧਿਆਨ ਰੱਖੋ।"
         : "Test your soil regularly. Maintain pH between 6.0-7.0. Use organic fertilizers and practice crop rotation. Also ensure proper drainage for healthy soil.";
     }
     
-    if (message.includes('water') || message.includes('पानी') || message.includes('నీరు')) {
+    if (message.includes('water') || message.includes('पानी') || message.includes('ਪਾਣੀ')) {
       return language === 'hi'
         ? "पानी देने का समय सुबह या शाम का बेहतर होता है। मिट्टी में नमी की जाँच करके ही पानी दें। ड्रिप इरिगेशन का उपयोग करें जहाँ संभव हो।"
-        : language === 'te'
-        ? "నీళ్లు పెట్టడానికి ఉదయం లేదా సాయంత్రం సమయం మంచిది. మట్టిలో తేమను పరీక్షించి నీరు పెట్టండి. వీలైతే డ్రిప్ ఇరిగేషన్ వాడండి."
+        : language === 'pa'
+        ? "ਪਾਣੀ ਦੇਣ ਦਾ ਸਮਾਂ ਸਵੇਰੇ ਜਾਂ ਸ਼ਾਮ ਦਾ ਬਿਹਤਰ ਹੁੰਦਾ ਹੈ। ਮਿੱਟੀ ਵਿੱਚ ਨਮੀ ਦੀ ਜਾਂਚ ਕਰਕੇ ਹੀ ਪਾਣੀ ਦਿਓ। ਜਿੱਥੇ ਸੰਭਵ ਹੋਵੇ ਡ੍ਰਿਪ ਸਿੰਚਾਈ ਦੀ ਵਰਤੋਂ ਕਰੋ।"
         : "Water in early morning or evening. Check soil moisture before watering. Use drip irrigation where possible to conserve water and improve efficiency.";
     }
     
     // Default response
     return language === 'hi'
       ? "यह एक अच्छा सवाल है! कृषि में कई कारक महत्वपूर्ण होते हैं जैसे मिट्टी, पानी, मौसम और बीज की गुणवत्ता। क्या आप किसी खास विषय पर और जानकारी चाहते हैं?"
-      : language === 'te'
-      ? "ఇది మంచి ప్రశ్న! వ్యవసాయంలో మట్టి, నీరు, వాతావరణం మరియు విత్తన నాణ్యత వంటి అనేక అంశాలు ముఖ్యం. మీరు ఏదైనా నిర్దిష్ట అంశంపై మరింత సమాచారం కావాలా?"
+      : language === 'pa'
+      ? "ਇਹ ਇੱਕ ਚੰਗਾ ਸਵਾਲ ਹੈ! ਖੇਤੀਬਾੜੀ ਵਿੱਚ ਕਈ ਕਾਰਕ ਮਹੱਤਵਪੂਰਨ ਹੁੰਦੇ ਹਨ ਜਿਵੇਂ ਮਿੱਟੀ, ਪਾਣੀ, ਮੌਸਮ ਅਤੇ ਬੀਜ ਦੀ ਗੁਣਵੱਤਾ। ਕੀ ਤੁਸੀਂ ਕਿਸੇ ਖਾਸ ਵਿਸ਼ੇ ਬਾਰੇ ਹੋਰ ਜਾਣਕਾਰੀ ਚਾਹੁੰਦੇ ਹੋ?"
       : "That's a great question! Agriculture involves many factors like soil health, water management, weather conditions, and seed quality. Would you like specific information on any of these topics?";
   };
 
