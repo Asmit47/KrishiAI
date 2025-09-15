@@ -1,20 +1,18 @@
 import React from 'react';
-import { Menu, Globe, Wifi, WifiOff } from 'lucide-react';
+import { Menu, Globe } from 'lucide-react';
 
 interface HeaderProps {
   language: string;
   setLanguage: (lang: string) => void;
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
-  isOnline: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
   language, 
   setLanguage, 
   sidebarOpen, 
-  setSidebarOpen,
-  isOnline 
+  setSidebarOpen
 }) => {
   const translations = {
     en: { title: "FarmAI Assistant", offline: "Offline Mode", online: "Online" },
@@ -38,13 +36,6 @@ const Header: React.FC<HeaderProps> = ({
         </div>
         
         <div className="flex items-center space-x-3">
-          <div className="flex items-center space-x-1 text-sm">
-            {isOnline ? <Wifi size={16} /> : <WifiOff size={16} />}
-            <span className="hidden sm:inline">
-              {isOnline ? t.online : t.offline}
-            </span>
-          </div>
-          
           <div className="relative">
             <select
               value={language}
