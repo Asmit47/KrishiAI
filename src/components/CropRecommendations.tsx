@@ -77,37 +77,37 @@ const CropRecommendations: React.FC<CropRecommendationsProps> = ({ language }) =
       medium: "मध्यम",
       low: "कम"
     },
-    te: {
-      title: "పంట సిఫార్సులు",
-      subtitle: "మీ వ్యవసాయ పరిస్థితుల ఆధారంగా వ్యక్తిగత పంట సూచనలను పొందండి",
-      filters: "సిఫార్సులను ఫిల్టర్ చేయండి",
-      season: "సీజన్",
-      soilType: "మట్టి రకం",
-      waterAvailability: "నీటి లభ్యత",
-      current: "ప్రస్తుత సీజన్",
-      kharif: "ఖరీఫ్ (వానాకాలం)",
-      rabi: "రబీ (చలికాలం)",
-      summer: "వేసవి",
-      loamy: "మట్టి మిశ్రమం",
-      clay: "బంకమట్టి",
-      sandy: "ఇసుక మట్టి",
-      black: "నల్ల మట్టి",
-      high: "అధికం",
-      medium: "మధ్యస్థం",
-      low: "తక్కువ",
-      recommendedCrops: "మీ కోసం సిఫార్సు చేయబడిన పంటలు",
-      profitPotential: "లాభ అవకాశాలు",
-      waterRequirement: "నీటి అవసరం",
-      growthPeriod: "వృద్ధి కాలం",
-      sustainability: "స్థిరత్వ స్కోర్",
-      marketDemand: "మార్కెట్ డిమాండ్",
-      expectedYield: "ఆశించిన దిగుబడి",
-      investment: "అవసరమైన పెట్టుబడి",
-      viewDetails: "వివరాలు చూడండి",
-      months: "నెలలు",
-      high: "అధికం",
-      medium: "మధ్యస్థం",
-      low: "తక్కువ"
+    pa: {
+      title: "ਫਸਲ ਸਿਫਾਰਸ਼ਾਂ",
+      subtitle: "ਆਪਣੇ ਖੇਤ ਦੀਆਂ ਸਥਿਤੀਆਂ ਦੇ ਆਧਾਰ 'ਤੇ ਵਿਅਕਤੀਗਤ ਫਸਲ ਸੁਝਾਅ ਪ੍ਰਾਪਤ ਕਰੋ",
+      filters: "ਸਿਫਾਰਸ਼ਾਂ ਨੂੰ ਫਿਲਟਰ ਕਰੋ",
+      season: "ਮੌਸਮ",
+      soilType: "ਮਿੱਟੀ ਦੀ ਕਿਸਮ",
+      waterAvailability: "ਪਾਣੀ ਦੀ ਉਪਲਬਧਤਾ",
+      current: "ਮੌਜੂਦਾ ਮੌਸਮ",
+      kharif: "ਖਰੀਫ (ਮਾਨਸੂਨ)",
+      rabi: "ਰਬੀ (ਸਰਦੀ)",
+      summer: "ਗਰਮੀ",
+      loamy: "ਦੋਮਟ",
+      clay: "ਚਿਕਨੀ",
+      sandy: "ਰੇਤਲੀ",
+      black: "ਕਾਲੀ ਮਿੱਟੀ",
+      high: "ਉੱਚ",
+      medium: "ਮੱਧਮ",
+      low: "ਘੱਟ",
+      recommendedCrops: "ਤੁਹਾਡੇ ਲਈ ਸਿਫਾਰਸ਼ੀ ਫਸਲਾਂ",
+      profitPotential: "ਮੁਨਾਫੇ ਦੀ ਸੰਭਾਵਨਾ",
+      waterRequirement: "ਪਾਣੀ ਦੀ ਲੋੜ",
+      growthPeriod: "ਵਿਕਾਸ ਦੀ ਮਿਆਦ",
+      sustainability: "ਸਥਿਰਤਾ ਸਕੋਰ",
+      marketDemand: "ਮਾਰਕੀਟ ਦੀ ਮੰਗ",
+      expectedYield: "ਅਪੇਖਿਤ ਪੈਦਾਵਾਰ",
+      investment: "ਲੋੜੀਂਦਾ ਨਿਵੇਸ਼",
+      viewDetails: "ਵੇਰਵੇ ਵੇਖੋ",
+      months: "ਮਹੀਨੇ",
+      high: "ਉੱਚ",
+      medium: "ਮੱਧਮ",
+      low: "ਘੱਟ"
     }
   };
 
@@ -118,7 +118,7 @@ const CropRecommendations: React.FC<CropRecommendationsProps> = ({ language }) =
       id: 1,
       name: "Rice",
       nameHi: "धान",
-      nameTe: "వరి",
+      namePa: "ਚਾਵਲ",
       profitPotential: "High",
       waterRequirement: "High",
       growthPeriod: 4,
@@ -126,7 +126,7 @@ const CropRecommendations: React.FC<CropRecommendationsProps> = ({ language }) =
       marketDemand: "High",
       expectedYield: "45 quintals/acre",
       expectedYieldHi: "45 क्विंटल/एकड़",
-      expectedYieldTe: "45 క్వింటళ్లు/ఎకరం",
+      expectedYieldPa: "45 ਕੁਇੰਟਲ/ਏਕੜ",
       investment: "₹15,000",
       season: ["kharif"],
       soilTypes: ["clay", "loamy"],
@@ -136,7 +136,7 @@ const CropRecommendations: React.FC<CropRecommendationsProps> = ({ language }) =
       id: 2,
       name: "Wheat",
       nameHi: "गेहूं",
-      nameTe: "గోధుమలు",
+      namePa: "ਕਣਕ",
       profitPotential: "Medium",
       waterRequirement: "Medium",
       growthPeriod: 5,
@@ -144,7 +144,7 @@ const CropRecommendations: React.FC<CropRecommendationsProps> = ({ language }) =
       marketDemand: "High",
       expectedYield: "25 quintals/acre",
       expectedYieldHi: "25 क्विंटल/एकड़",
-      expectedYieldTe: "25 క్వింటళ్లు/ఎకరం",
+      expectedYieldPa: "25 ਕੁਇੰਟਲ/ਏਕੜ",
       investment: "₹12,000",
       season: ["rabi"],
       soilTypes: ["loamy", "clay"],
@@ -154,7 +154,7 @@ const CropRecommendations: React.FC<CropRecommendationsProps> = ({ language }) =
       id: 3,
       name: "Cotton",
       nameHi: "कपास",
-      nameTe: "పత్తి",
+      namePa: "ਕਪਾਹ",
       profitPotential: "High",
       waterRequirement: "Medium",
       growthPeriod: 6,
@@ -162,7 +162,7 @@ const CropRecommendations: React.FC<CropRecommendationsProps> = ({ language }) =
       marketDemand: "High",
       expectedYield: "15 quintals/acre",
       expectedYieldHi: "15 क्विंटल/एकड़",
-      expectedYieldTe: "15 క్వింటళ్లు/ఎకరం",
+      expectedYieldPa: "15 ਕੁਇੰਟਲ/ਏਕੜ",
       investment: "₹18,000",
       season: ["kharif"],
       soilTypes: ["black", "loamy"],
@@ -172,7 +172,7 @@ const CropRecommendations: React.FC<CropRecommendationsProps> = ({ language }) =
       id: 4,
       name: "Sugarcane",
       nameHi: "गन्ना",
-      nameTe: "చెరకు",
+      namePa: "ਗੰਨਾ",
       profitPotential: "High",
       waterRequirement: "High",
       growthPeriod: 12,
@@ -180,7 +180,7 @@ const CropRecommendations: React.FC<CropRecommendationsProps> = ({ language }) =
       marketDemand: "Medium",
       expectedYield: "400 quintals/acre",
       expectedYieldHi: "400 क्विंटल/एकड़",
-      expectedYieldTe: "400 క్వింటళ్లు/ఎకరం",
+      expectedYieldPa: "400 ਕੁਇੰਟਲ/ਏਕੜ",
       investment: "₹25,000",
       season: ["current"],
       soilTypes: ["loamy", "clay"],
@@ -284,7 +284,7 @@ const CropRecommendations: React.FC<CropRecommendationsProps> = ({ language }) =
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <h4 className="text-xl font-bold text-gray-800">
-                        {language === 'hi' ? crop.nameHi : language === 'te' ? crop.nameTe : crop.name}
+                        {language === 'hi' ? crop.nameHi : language === 'pa' ? crop.namePa : crop.name}
                       </h4>
                       <div className="flex items-center space-x-1 mt-1">
                         {[1, 2, 3, 4, 5].map((star) => (
@@ -333,7 +333,7 @@ const CropRecommendations: React.FC<CropRecommendationsProps> = ({ language }) =
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-gray-600">{t.expectedYield}:</span>
                       <span className="font-medium">
-                        {language === 'hi' ? crop.expectedYieldHi : language === 'te' ? crop.expectedYieldTe : crop.expectedYield}
+                        {language === 'hi' ? crop.expectedYieldHi : language === 'pa' ? crop.expectedYieldPa : crop.expectedYield}
                       </span>
                     </div>
                     
