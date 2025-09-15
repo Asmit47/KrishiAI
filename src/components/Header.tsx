@@ -1,49 +1,42 @@
 import React from 'react';
-import { Menu, Globe } from 'lucide-react';
+import { Globe } from 'lucide-react';
 
 interface HeaderProps {
   language: string;
   setLanguage: (lang: string) => void;
-  sidebarOpen: boolean;
-  setSidebarOpen: (open: boolean) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
   language, 
-  setLanguage, 
-  sidebarOpen, 
-  setSidebarOpen
+  setLanguage
 }) => {
   const translations = {
-    en: { title: "Krishi AI", offline: "Offline Mode", online: "Online" },
-    hi: { title: "कृषि AI", offline: "ऑफलाइन मोड", online: "ऑनलाइन" },
-    pa: { title: "ਕ੍ਰਿਸ਼ੀ AI", offline: "ਆਫਲਾਈਨ ਮੋਡ", online: "ਆਨਲਾਈਨ" }
+    en: { title: "Krishi AI" },
+    hi: { title: "कृषि AI" },
+    pa: { title: "ਕ੍ਰਿਸ਼ੀ AI" }
   };
 
   const t = translations[language as keyof typeof translations] || translations.en;
 
   return (
-    <header className="bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg">
-      <div className="flex items-center justify-between p-4">
-        <div className="flex items-center space-x-3">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 rounded-lg hover:bg-green-500 transition-colors"
-          >
-            <Menu size={24} />
-          </button>
-          <h1 className="text-xl font-bold">{t.title}</h1>
+    <header className="bg-white shadow-sm border-b border-gray-100">
+      <div className="flex items-center justify-between px-4 py-3">
+        {/* Left - Logo/Title */}
+        <div className="flex items-center">
+          <h1 className="text-xl font-bold text-gray-800">{t.title}</h1>
         </div>
         
-        <div className="flex items-center space-x-3">
+        {/* Right - Language Selector */}
+        <div className="flex items-center">
           <div className="relative">
+            <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={16} />
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              className="bg-green-500 text-white rounded-lg px-3 py-1 text-sm border-none focus:ring-2 focus:ring-green-300"
+              className="bg-gray-50 text-gray-700 rounded-full pl-9 pr-4 py-2 text-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent appearance-none cursor-pointer"
             >
-              <option value="en">English</option>
-              <option value="hi">हिन्दी</option>
+              <option value="en">ENG</option>
+              <option value="hi">हिंदी</option>
               <option value="pa">ਪੰਜਾਬੀ</option>
             </select>
           </div>

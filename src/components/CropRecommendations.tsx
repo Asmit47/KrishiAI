@@ -40,10 +40,7 @@ const CropRecommendations: React.FC<CropRecommendationsProps> = ({ language }) =
       expectedYield: "Expected Yield",
       investment: "Investment Required",
       viewDetails: "View Details",
-      months: "months",
-      high: "High",
-      medium: "Medium",
-      low: "Low"
+      months: "months"
     },
     hi: {
       title: "फसल सुझाव",
@@ -72,10 +69,7 @@ const CropRecommendations: React.FC<CropRecommendationsProps> = ({ language }) =
       expectedYield: "अपेक्षित उपज",
       investment: "आवश्यक निवेश",
       viewDetails: "विवरण देखें",
-      months: "महीने",
-      high: "अधिक",
-      medium: "मध्यम",
-      low: "कम"
+      months: "महीने"
     },
     pa: {
       title: "ਫਸਲ ਸਿਫਾਰਸ਼ਾਂ",
@@ -104,10 +98,7 @@ const CropRecommendations: React.FC<CropRecommendationsProps> = ({ language }) =
       expectedYield: "ਅਪੇਖਿਤ ਪੈਦਾਵਾਰ",
       investment: "ਲੋੜੀਂਦਾ ਨਿਵੇਸ਼",
       viewDetails: "ਵੇਰਵੇ ਵੇਖੋ",
-      months: "ਮਹੀਨੇ",
-      high: "ਉੱਚ",
-      medium: "ਮੱਧਮ",
-      low: "ਘੱਟ"
+      months: "ਮਹੀਨੇ"
     }
   };
 

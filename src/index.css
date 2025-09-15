@@ -1,3 +1,212 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  /* Global root styles for consistent theming */
+  :root {
+    --primary-green: #22c55e;
+    --primary-green-hover: #16a34a;
+    --light-green: #dcfce7;
+    --light-green-hover: #bbf7d0;
+  }
+
+  /* Body base styles */
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  }
+
+  /* Smooth scrolling for the entire document */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Input focus styles */
+  input:focus, 
+  select:focus, 
+  textarea:focus {
+    @apply outline-none ring-2 ring-green-500 border-transparent;
+  }
+}
+
+@layer components {
+  /* Primary button component */
+  .btn-primary {
+    @apply bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center;
+  }
+
+  /* Secondary button component */
+  .btn-secondary {
+    @apply bg-green-100 hover:bg-green-200 text-green-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center;
+  }
+
+  /* Card component */
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
+  }
+
+  /* Icon container */
+  .icon-container {
+    @apply p-2 rounded-lg;
+  }
+
+  /* Weather icon styles */
+  .weather-icon-orange {
+    @apply icon-container bg-orange-100 text-orange-600;
+  }
+
+  .weather-icon-blue {
+    @apply icon-container bg-blue-100 text-blue-600;
+  }
+
+  .weather-icon-yellow {
+    @apply icon-container bg-yellow-100 text-yellow-600;
+  }
+
+  .weather-icon-green {
+    @apply icon-container bg-green-100 text-green-600;
+  }
+
+  /* Section heading */
+  .section-heading {
+    @apply text-lg font-semibold text-gray-800 mb-4;
+  }
+
+  /* Navigation active state */
+  .nav-active {
+    @apply text-green-600;
+  }
+
+  .nav-inactive {
+    @apply text-gray-500;
+  }
+
+  /* Status colors for soil health */
+  .status-excellent {
+    @apply text-green-500;
+  }
+
+  .status-good {
+    @apply text-blue-500;
+  }
+
+  .status-warning {
+    @apply text-yellow-500;
+  }
+
+  .status-critical {
+    @apply text-red-500;
+  }
+}
+
+@layer utilities {
+  /* Custom utilities for the app */
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Prevent scroll when mobile menu is open */
+  .no-scroll {
+    @apply overflow-hidden;
+  }
+
+  /* Smooth transitions for interactive elements */
+  .transition-smooth {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Shadow variations */
+  .shadow-soft {
+    box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.1), 0 4px 16px -4px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Glass effect for modern UI */
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-sm border border-white/20;
+  }
+
+  /* Green gradient backgrounds */
+  .bg-green-gradient {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  }
+
+  /* Loading spinner animation */
+  .spinner {
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Fade in animation */
+  .fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Pulse animation for loading states */
+  .pulse-green {
+    animation: pulseGreen 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulseGreen {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: .7;
+    }
+  }
+}
+
+/* Mobile-specific styles */
+@media (max-width: 640px) {
+  .mobile-padding {
+    @apply px-4;
+  }
+
+  /* Ensure buttons are touch-friendly on mobile */
+  button {
+    min-height: 44px;
+  }
+
+  /* Improve readability on mobile */
+  .text-mobile-friendly {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Dark mode support (optional for future) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* You can add dark mode variables here if needed in the future */
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-friendly {
+    @apply text-black bg-white shadow-none;
+  }
+}

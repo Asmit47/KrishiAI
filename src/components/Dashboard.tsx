@@ -1,247 +1,288 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { 
-  Thermometer, 
-  Droplets, 
-  Wind, 
-  Sun, 
-  TrendingUp, 
-  DollarSign,
-  AlertTriangle,
-  CheckCircle,
   Camera,
-  Upload
+  Upload,
+  Thermometer,
+  Wind,
+  Droplet,
+  Sun,
+  TrendingUp,
+  AlertTriangle
 } from 'lucide-react';
 
+interface StatItem {
+  id: number;
+  label: string;
+  value: string;
+  icon: React.ElementType;
+  trend: 'up' | 'down' | 'neutral';
+  change?: string;
+  color?: string;
+}
+
+type Language = 'en' | 'hi' | 'pa';
+
 interface DashboardProps {
-  language: string;
+  language: Language;
   onNavigateToTab: (tab: string) => void;
 }
 
+const getStatusColor = (status: 'good' | 'warning' | 'critical'): string => {
+  switch (status) {
+    case 'good': return 'text-green-500';
+    case 'warning': return 'text-yellow-500';
+    case 'critical': return 'text-red-500';
+    default: return 'text-gray-500';
+  }
+};
+
 const Dashboard: React.FC<DashboardProps> = ({ language, onNavigateToTab }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const translations = {
     en: {
-      welcomeBack: "Welcome Back, Farmer!",
-      quickDiseaseDetection: "Quick Disease Detection",
-      scanPlantNow: "Scan Plant Now",
-      uploadImage: "Upload Image",
-      detectDiseases: "Detect plant diseases instantly with AI-powered image analysis",
-      todayWeather: "Today's Weather",
-      soilHealth: "Soil Health",
-      recentAlerts: "Recent Alerts",
-      quickStats: "Quick Stats",
+      cropDiseaseDetection: "Crop Disease Detection",
+      uploadPhoto: "Upload Photo",
+      clickPhoto: "Click Photo",
+      weatherDetails: "Weather Details",
       temperature: "Temperature",
-      humidity: "Humidity", 
-      windSpeed: "Wind Speed",
+      wind: "Wind",
+      humidity: "Humidity",
       uvIndex: "UV Index",
-      ph: "pH Level",
-      moisture: "Moisture",
-      nitrogen: "Nitrogen",
-      excellent: "Excellent",
-      good: "Good",
-      needsAttention: "Needs Attention",
-      cropsGrowing: "Crops Growing",
-      activeAlerts: "Active Alerts",
-      avgYield: "Avg Yield",
-      profitMargin: "Profit Margin"
+      soilHealthDetails: "Soil Health Details",
+      phLevel: "pH Level",
+      moisture: "Moisture", 
+      nitrogenAmount: "Nitrogen Amount",
+      alerts: "Alerts",
+      noAlerts: "No Alerts",
+      high: "High",
+      appName: "Krishi AI",
+      scanPlantNow: "Scan Plant Now",
+      uploadImage: "Upload Image"
     },
     hi: {
-      welcomeBack: "वापस स्वागत है, किसान!",
-      quickDiseaseDetection: "त्वरित रोग पहचान",
-      scanPlantNow: "अभी पौधे को स्कैन करें",
-      uploadImage: "तस्वीर अपलोड करें",
-      detectDiseases: "AI-संचालित छवि विश्लेषण के साथ तुरंत पौधों की बीमारियों का पता लगाएं",
-      todayWeather: "आज का मौसम",
-      soilHealth: "मिट्टी का स्वास्थ्य",
-      recentAlerts: "हाल की चेतावनी",
-      quickStats: "त्वरित आंकड़े",
+      cropDiseaseDetection: "फसल रोग पहचान",
+      uploadPhoto: "फोटो अपलोड करें",
+      clickPhoto: "फोटो लें",
+      weatherDetails: "मौसम विवरण",
       temperature: "तापमान",
+      wind: "हवा",
       humidity: "नमी",
-      windSpeed: "हवा की गति",
       uvIndex: "यूवी सूचकांक",
-      ph: "पीएच स्तर",
+      soilHealthDetails: "मिट्टी स्वास्थ्य विवरण",
+      phLevel: "पीएच स्तर",
       moisture: "नमी",
-      nitrogen: "नाइट्रोजन",
-      excellent: "उत्कृष्ट",
-      good: "अच्छा",
-      needsAttention: "ध्यान चाहिए",
-      cropsGrowing: "फसलें उगाना",
-      activeAlerts: "सक्रिय अलर्ट",
-      avgYield: "औसत उपज",
-      profitMargin: "लाभ मार्जिन"
+      nitrogenAmount: "नाइट्रोजन मात्रा",
+      alerts: "अलर्ट",
+      noAlerts: "कोई अलर्ट नहीं",
+      high: "उच्च",
+      appName: "कृषि एआई",
+      scanPlantNow: "पौधे को स्कैन करें",
+      uploadImage: "इमेज अपलोड करें"
     },
     pa: {
-      welcomeBack: "ਵਾਪਸ ਜੀ ਆਇਆਂ ਨੂੰ, ਕਿਸਾਨ!",
-      quickDiseaseDetection: "ਤੇਜ਼ ਬਿਮਾਰੀ ਪਛਾਣ",
-      scanPlantNow: "ਹੁਣੇ ਪੌਧੇ ਨੂੰ ਸਕੈਨ ਕਰੋ",
-      uploadImage: "ਤਸਵੀਰ ਅਪਲੋਡ ਕਰੋ",
-      detectDiseases: "AI-ਸੰਚਾਲਿਤ ਚਿੱਤਰ ਵਿਸ਼ਲੇਸ਼ਣ ਨਾਲ ਤੁਰੰਤ ਪੌਧਿਆਂ ਦੀਆਂ ਬਿਮਾਰੀਆਂ ਦਾ ਪਤਾ ਲਗਾਓ",
-      todayWeather: "ਅੱਜ ਦਾ ਮੌਸਮ",
-      soilHealth: "ਮਿੱਟੀ ਦੀ ਸਿਹਤ",
-      recentAlerts: "ਹਾਲ ਦੀਆਂ ਚੇਤਾਵਨੀਆਂ",
-      quickStats: "ਤੇਜ਼ ਅੰਕੜੇ",
+      cropDiseaseDetection: "ਫਸਲ ਦੀ ਬਿਮਾਰੀ ਪਛਾਣ",
+      uploadPhoto: "ਫੋਟੋ ਅਪਲੋਡ ਕਰੋ",
+      clickPhoto: "ਫੋਟੋ ਖਿੱਚੋ",
+      weatherDetails: "ਮੌਸਮ ਵੇਰਵਾ",
       temperature: "ਤਾਪਮਾਨ",
+      wind: "ਹਵਾ",
       humidity: "ਨਮੀ",
-      windSpeed: "ਹਵਾ ਦੀ ਗਤੀ",
-      uvIndex: "UV ਸੂਚਕਾਂਕ",
-      ph: "pH ਪੱਧਰ",
+      uvIndex: "ਯੂਵੀ ਸੂਚਕਾਂਕ",
+      soilHealthDetails: "ਮਿੱਟੀ ਸਿਹਤ ਵੇਰਵਾ",
+      phLevel: "ਪੀਐੱਚ ਪੱਧਰ",
       moisture: "ਨਮੀ",
-      nitrogen: "ਨਾਈਟ੍ਰੋਜਨ",
-      excellent: "ਸ਼ਾਨਦਾਰ",
-      good: "ਚੰਗਾ",
-      needsAttention: "ਧਿਆਨ ਚਾਹੀਦਾ ਹੈ",
-      cropsGrowing: "ਫਸਲਾਂ ਉਗਾਉਣਾ",
-      activeAlerts: "ਸਰਗਰਮ ਅਲਰਟ",
-      avgYield: "ਔਸਤ ਪੈਦਾਵਾਰ",
-      profitMargin: "ਮੁਨਾਫਾ ਮਾਰਜਿਨ"
+      nitrogenAmount: "ਨਾਈਟ੍ਰੋਜਨ ਮਾਤਰਾ",
+      alerts: "ਚੇਤਾਵਨੀਆਂ",
+      noAlerts: "ਕੋਈ ਚੇਤਾਵਨੀ ਨਹੀਂ",
+      high: "ਉੱਚਾ",
+      appName: "ਕ੍ਰਿਸ਼ੀ ਏਆਈ",
+      scanPlantNow: "ਪੌਦੇ ਨੂੰ ਸਕੈਨ ਕਰੋ",
+      uploadImage: "ਤਸਵੀਰ ਅਪਲੋਡ ਕਰੋ"
     }
   };
 
-  const t = translations[language as keyof typeof translations] || translations.en;
+  const t = translations[language];
 
-  const weatherData = [
-    { icon: Thermometer, label: t.temperature, value: "28°C", color: "text-orange-500" },
-    { icon: Droplets, label: t.humidity, value: "65%", color: "text-blue-500" },
-    { icon: Wind, label: t.windSpeed, value: "12 km/h", color: "text-gray-500" },
-    { icon: Sun, label: t.uvIndex, value: "6", color: "text-yellow-500" }
-  ];
+  // Handle file upload
+  const handleFileUpload = () => {
+    fileInputRef.current?.click();
+  };
 
-  const soilData = [
-    { label: t.ph, value: "6.8", status: t.excellent, color: "text-green-500" },
-    { label: t.moisture, value: "45%", status: t.good, color: "text-blue-500" },
-    { label: t.nitrogen, value: "Medium", status: t.needsAttention, color: "text-yellow-500" }
-  ];
+  // Handle camera capture
+  const handleCameraCapture = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      // Here you would implement camera capture logic
+      // For now, just navigate to disease detection
+      onNavigateToTab('disease-detection');
+      stream.getTracks().forEach(track => track.stop());
+    } catch (error) {
+      console.error('Camera access denied:', error);
+      // Fallback to file upload
+      handleFileUpload();
+    }
+  };
 
-  const stats = [
-    { label: t.cropsGrowing, value: "5", icon: CheckCircle, color: "bg-green-500" },
-    { label: t.activeAlerts, value: "2", icon: AlertTriangle, color: "bg-yellow-500" },
-    { label: t.avgYield, value: "85%", icon: TrendingUp, color: "bg-blue-500" },
-    { label: t.profitMargin, value: "₹23K", icon: DollarSign, color: "bg-purple-500" }
-  ];
+  // Handle file selection
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Here you would handle the selected image
+      console.log('Selected file:', file);
+      onNavigateToTab('disease-detection');
+    }
+  };
 
   return (
-    <div className="p-4 space-y-6">
-      <div className="bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-xl p-6 shadow-lg">
-        <h2 className="text-2xl font-bold mb-2">{t.welcomeBack}</h2>
-        <p className="opacity-90">Monitor your farm's health and make data-driven decisions</p>
-      </div>
-
-      {/* Quick Disease Detection */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h3 className="text-xl font-semibold text-gray-800 flex items-center">
-              <Camera size={24} className="mr-3 text-green-500" />
-              {t.quickDiseaseDetection}
-            </h3>
-            <p className="text-gray-600 mt-1">{t.detectDiseases}</p>
-          </div>
-        </div>
+    <div className="min-h-screen bg-gray-50 pb-20">
+      <div className="max-w-md mx-auto p-4 space-y-6">
         
-        <div className="flex flex-col sm:flex-row gap-4">
-          <button
-            onClick={() => onNavigateToTab('disease-detection')}
-            className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-4 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-3"
-          >
-            <Camera size={20} />
-            <span>{t.scanPlantNow}</span>
-          </button>
+        {/* Crop Disease Detection Section */}
+        <div className="bg-white rounded-xl p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">
+            {t.cropDiseaseDetection}
+          </h2>
           
-          <button
-            onClick={() => onNavigateToTab('disease-detection')}
-            className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-4 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-3"
-          >
-            <Upload size={20} />
-            <span>{t.uploadImage}</span>
-          </button>
+          <div className="space-y-3">
+            {/* Upload Photo Button */}
+            <button
+              onClick={handleFileUpload}
+              className="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors duration-200"
+            >
+              <Upload size={18} />
+              <span>{t.uploadPhoto}</span>
+            </button>
+            
+            {/* Click Photo Button */}
+            <button
+              onClick={handleCameraCapture}
+              className="w-full bg-green-100 hover:bg-green-200 text-green-700 font-medium py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors duration-200"
+            >
+              <Camera size={18} />
+              <span>{t.clickPhoto}</span>
+            </button>
+          </div>
+
+          {/* Hidden file input */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileSelect}
+            className="hidden"
+          />
         </div>
-      </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat, index) => {
-          const Icon = stat.icon;
-          return (
-            <div key={index} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-              <div className="flex items-center space-x-3">
-                <div className={`${stat.color} p-2 rounded-lg`}>
-                  <Icon size={20} className="text-white" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
-                  <p className="text-sm text-gray-600">{stat.label}</p>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Weather and Soil Health */}
-      <div className="grid lg:grid-cols-2 gap-6">
-        {/* Weather Card */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <Sun size={20} className="mr-2 text-yellow-500" />
-            {t.todayWeather}
+        {/* Weather Details Section */}
+        <div className="bg-white rounded-xl p-6 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+            {t.weatherDetails}
           </h3>
+          
           <div className="grid grid-cols-2 gap-4">
-            {weatherData.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <div key={index} className="flex items-center space-x-3">
-                  <Icon size={18} className={item.color} />
-                  <div>
-                    <p className="text-sm text-gray-600">{item.label}</p>
-                    <p className="font-semibold text-gray-800">{item.value}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Soil Health Card */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <TrendingUp size={20} className="mr-2 text-green-500" />
-            {t.soilHealth}
-          </h3>
-          <div className="space-y-4">
-            {soilData.map((item, index) => (
-              <div key={index} className="flex items-center justify-between">
-                <span className="text-gray-600">{item.label}</span>
-                <div className="text-right">
-                  <p className="font-semibold text-gray-800">{item.value}</p>
-                  <p className={`text-xs ${item.color}`}>{item.status}</p>
-                </div>
+            {/* Temperature */}
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-orange-100 rounded-lg">
+                <Thermometer size={18} className="text-orange-600" />
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
+              <div>
+                <p className="text-sm text-gray-600">{t.temperature}</p>
+                <p className="text-xl font-bold text-gray-800">28°C</p>
+              </div>
+            </div>
 
-      {/* Recent Alerts */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-          <AlertTriangle size={20} className="mr-2 text-yellow-500" />
-          {t.recentAlerts}
-        </h3>
-        <div className="space-y-3">
-          <div className="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
-            <AlertTriangle size={16} className="text-yellow-500 mt-1" />
-            <div>
-              <p className="font-medium text-gray-800">Nitrogen Deficiency Detected</p>
-              <p className="text-sm text-gray-600">Consider applying nitrogen fertilizer to improve soil health</p>
+            {/* Wind */}
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <Wind size={18} className="text-blue-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">{t.wind}</p>
+                <p className="text-xl font-bold text-gray-800">12 km/h</p>
+              </div>
             </div>
-          </div>
-          <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
-            <Droplets size={16} className="text-blue-500 mt-1" />
-            <div>
-              <p className="font-medium text-gray-800">Optimal Watering Time</p>
-              <p className="text-sm text-gray-600">Weather conditions are perfect for irrigation today</p>
+
+            {/* Humidity */}
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <Droplet size={18} className="text-blue-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">{t.humidity}</p>
+                <p className="text-xl font-bold text-gray-800">65%</p>
+              </div>
+            </div>
+
+            {/* UV Index */}
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-yellow-100 rounded-lg">
+                <Sun size={18} className="text-yellow-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">{t.uvIndex}</p>
+                <p className="text-xl font-bold text-gray-800">{t.high}</p>
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Soil Health Details Section */}
+        <div className="bg-white rounded-xl p-6 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+            {t.soilHealthDetails}
+          </h3>
+          
+          <div className="space-y-4">
+            {/* pH Level */}
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-green-100 rounded-lg">
+                <TrendingUp size={18} className="text-green-600" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm text-gray-600">{t.phLevel}</p>
+                <p className="text-xl font-bold text-gray-800">6.5</p>
+              </div>
+            </div>
+
+            {/* Moisture */}
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <Droplet size={18} className="text-blue-600" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm text-gray-600">{t.moisture}</p>
+                <p className="text-xl font-bold text-gray-800">45%</p>
+              </div>
+            </div>
+
+            {/* Nitrogen Amount */}
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-green-100 rounded-lg">
+                <TrendingUp size={18} className="text-green-600" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm text-gray-600">{t.nitrogenAmount}</p>
+                <p className="text-xl font-bold text-gray-800">120 kg/ha</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Alerts Section */}
+        <div className="bg-white rounded-xl p-6 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+            {t.alerts}
+          </h3>
+          
+          <div className="text-center py-8">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-8 h-8 border-2 border-gray-300 border-dashed rounded-full"></div>
+            </div>
+            <p className="text-gray-500 font-medium">{t.noAlerts}</p>
+          </div>
+        </div>
+
       </div>
     </div>
   );

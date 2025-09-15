@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
-import Sidebar from './components/Sidebar';
+import BottomNav from './components/BottomNav';
 import Dashboard from './components/Dashboard';
 import DiseaseDetection from './components/DiseaseDetection';
 import ChatAssistant from './components/ChatAssistant';
@@ -8,8 +8,7 @@ import CropRecommendations from './components/CropRecommendations';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [language, setLanguage] = useState('en');
+  const [language, setLanguage] = useState<'en' | 'hi' | 'pa'>('en');
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
@@ -69,34 +68,27 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="flex h-screen">
-        <Sidebar
-          isOpen={sidebarOpen}
-          setIsOpen={setSidebarOpen}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
+    <div className="min-h-screen bg-gray-50 pb-16">
+      <div className="flex flex-col min-h-screen">
+        <Header
           language={language}
+          setLanguage={(l: string) => setLanguage(l as 'en' | 'hi' | 'pa')}
         />
-        
-        <div className="flex-1 flex flex-col overflow-hidden lg:ml-64">
-          <Header
-            language={language}
-            setLanguage={setLanguage}
-            sidebarOpen={sidebarOpen}
-            setSidebarOpen={setSidebarOpen}
-            isOnline={isOnline}
-          />
-          
-          <main className="flex-1 overflow-y-auto">
-            {renderContent()}
-          </main>
-        </div>
+        <main className="flex-1 overflow-y-auto">
+          {renderContent()}
+        </main>
       </div>
+
+      {/* Bottom Navigation */}
+      <BottomNav
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        language={language}
+      />
 
       {/* Offline Indicator */}
       {!isOnline && (
-        <div className="fixed bottom-4 left-4 right-4 lg:left-68 bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-lg z-50">
+        <div className="fixed bottom-20 left-4 right-4 bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-lg z-50">
           <p className="text-sm font-medium text-center">
             You're currently offline. Some features may be limited.
           </p>

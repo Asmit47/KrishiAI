@@ -1,0 +1,58 @@
+:root {
+  /* New Agricultural Color Palette */
+  --color-primary: #4CAF50;        /* Main green from upload button */
+  --color-primary-light: #66BB6A;   /* Lighter green variant */
+  --color-primary-dark: #388E3C;    /* Darker green variant */
+  --color-secondary: #C8E6C9;       /* Light green from click photo button */
+  --color-secondary-light: #E8F5E8; /* Very light green */
+  --color-secondary-dark: #A5D6A7;  /* Medium light green */
+  --color-dark: #1B5E20;            /* Dark green for text */
+  --color-dark-rgb: 27, 94, 32;     /* RGB values for dark green */
+  --color-accent: #2E7D32;          /* Accent green for icons */
+  --color-white: #FFFFFF;
+  --color-background: #F8FDF8;      /* Very light green tint for background */
+  
+  /* Status Colors */
+  --color-success: #4CAF50;         /* Success state */
+  --color-warning: #FF9800;         /* Warning state */
+  --color-info: #2196F3;            /* Info state */
+  --color-neutral: #9E9E9E;         /* Neutral/disabled state */
+  
+  /* Card and Surface Colors */
+  --color-card-bg: #FFFFFF;
+  --color-card-border: #E8F5E8;
+  --color-card-shadow: rgba(76, 175, 80, 0.1);
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  --gradient-secondary: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+  --gradient-background: linear-gradient(180deg, var(--color-background) 0%, var(--color-white) 100%);
+  
+  /* Semantic colors */
+  --color-text: var(--color-dark);
+  --color-text-secondary: #4A4A4A;
+  --color-text-muted: #757575;
+  --color-bg: var(--color-background);
+  --color-header-bg: var(--color-white);
+  --color-button-bg: var(--color-primary);
+  --color-button-bg-secondary: var(--color-secondary);
+  --color-button-hover: var(--color-primary-dark);
+  --color-button-text: var(--color-white);
+  --color-button-text-secondary: var(--color-dark);
+  
+  /* Navigation */
+  --color-nav-bg: var(--color-white);
+  --color-nav-active: var(--color-primary);
+  --color-nav-inactive: var(--color-neutral);
+  
+  /* Weather and Data Display */
+  --color-weather-temp: var(--color-dark);
+  --color-weather-icon: var(--color-primary);
+  --color-metric-value: var(--color-dark);
+  --color-metric-label: var(--color-text-muted);
+  
+  /* Border and Divider Colors */
+  --color-border: #E0E0E0;
+  --color-border-light: var(--color-card-border);
+  --color-divider: #F0F0F0;
+}
