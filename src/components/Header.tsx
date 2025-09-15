@@ -17,9 +17,9 @@ const Header: React.FC<HeaderProps> = ({
   isOnline 
 }) => {
   const translations = {
-    en: { title: "FarmAI Assistant", offline: "Offline Mode", online: "Online" },
-    hi: { title: "फार्म AI सहायक", offline: "ऑफलाइन मोड", online: "ऑनलाइन" },
-    pa: { title: "ਫਾਰਮ AI ਸਹਾਇਕ", offline: "ਆਫਲਾਈਨ ਮੋਡ", online: "ਆਨਲਾਈਨ" }
+    en: { title: "Krishi AI", offline: "Offline Mode", online: "Online" },
+    hi: { title: "कृषि AI", offline: "ऑफलाइन मोड", online: "ऑनलाइन" },
+    pa: { title: "ਕ੍ਰਿਸ਼ੀ AI", offline: "ਆਫਲਾਈਨ ਮੋਡ", online: "ਆਨਲਾਈਨ" }
   };
 
   const t = translations[language as keyof typeof translations] || translations.en;
