@@ -136,7 +136,7 @@ const ChatAssistant: React.FC<ChatAssistantProps> = ({ language }) => {
   };
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
+    <div className="p-4 max-w-4xl mx-auto mt-20">
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-[80vh] flex flex-col">
         {/* Header */}
         <div className="bg-gradient-to-r from-green-500 to-blue-500 text-white p-4">

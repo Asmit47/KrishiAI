@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import Header from './components/Header';
+import { useState, useEffect } from 'react';
 import BottomNav from './components/BottomNav';
+import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import DiseaseDetection from './components/DiseaseDetection';
 import ChatAssistant from './components/ChatAssistant';
 import CropRecommendations from './components/CropRecommendations';
+import SoilAssessment from './components/SoilAssessment';
+import Marketplace from './components/Marketplace';
+import AIAdviceAssistant from './components/AIAdviceAssistant';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -12,6 +15,7 @@ function App() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
+    // Handle online/offline status
     const handleOnlineStatusChange = () => {
       setIsOnline(navigator.onLine);
     };
@@ -30,9 +34,9 @@ function App() {
       case 'dashboard':
         return <Dashboard language={language} onNavigateToTab={setActiveTab} />;
       case 'disease-detection':
-        return <DiseaseDetection language={language} />;
+        return <DiseaseDetection language={language} onBack={() => setActiveTab('dashboard')} />;
       case 'chat':
-        return <ChatAssistant language={language} />;
+        return <AIAdviceAssistant language={language} onBack={() => setActiveTab('dashboard')} />;
       case 'crop-recommendations':
         return <CropRecommendations language={language} />;
       case 'weather':
@@ -44,6 +48,8 @@ function App() {
             </div>
           </div>
         );
+      case 'soil':
+        return <SoilAssessment language={language} onBack={() => setActiveTab('dashboard')} />;
       case 'soil-analysis':
         return (
           <div className="p-4 max-w-4xl mx-auto">
@@ -54,30 +60,18 @@ function App() {
           </div>
         );
       case 'market-prices':
-        return (
-          <div className="p-4 max-w-4xl mx-auto">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Market Prices</h2>
-              <p className="text-gray-600">Real-time market prices and trends will be displayed here.</p>
-            </div>
-          </div>
-        );
+        return <Marketplace language={language} onBack={() => setActiveTab('dashboard')} />;
       default:
         return <Dashboard language={language} onNavigateToTab={setActiveTab} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-16">
-      <div className="flex flex-col min-h-screen">
-        <Header
-          language={language}
-          setLanguage={(l: string) => setLanguage(l as 'en' | 'hi' | 'pa')}
-        />
-        <main className="flex-1 overflow-y-auto">
-          {renderContent()}
-        </main>
-      </div>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <Header language={language} setLanguage={setLanguage} />
+      <main className="flex-1 pb-16">
+        {renderContent()}
+      </main>
 
       {/* Bottom Navigation */}
       <BottomNav

@@ -1,40 +1,100 @@
-import React, { useState, useRef } from 'react';
-import { Camera, Upload, AlertTriangle, CheckCircle, Loader, X } from 'lucide-react';
+import React, { useRef, useState, useCallback, FC } from 'react';
 
-interface DiseaseDetectionProps {
-  language: string;
+type Language = 'en' | 'hi' | 'pa';
+
+interface Solution {
+  icon: string;
+  title: string;
+  description: string;
 }
 
-const DiseaseDetection: React.FC<DiseaseDetectionProps> = ({ language }) => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<any>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+interface SampleResults {
+  disease: string;
+  confidence: string;
+  severity: string;
+  treatment: string[];
+  prevention: string[];
+}
 
-  const translations = {
+interface TranslationType {
+  title: string;
+  subtitle: string;
+  uploadPhoto: string;
+  takePhoto: string;
+  results: string;
+  diagnosis: string;
+  earlyBlight: string;
+  diagnosisText: string;
+  suggestedSolutions: string;
+  solutions: Solution[];
+  analyzing: string;
+  noImageSelected: string;
+  analysisComplete: string;
+  diseaseDetected: string;
+  healthyPlant: string;
+  confidence: string;
+  recommendations: string;
+  prevention: string;
+  tryAnother: string;
+  sampleResults: SampleResults;
+}
+
+interface DiseaseDetectionProps {
+  language: Language;
+  onBack: () => void;
+}
+
+const DiseaseDetection: FC<DiseaseDetectionProps> = ({ language, onBack }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisComplete, setAnalysisComplete] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const translations: Record<Language, TranslationType> = {
     en: {
-      title: "Plant Disease Detection",
-      subtitle: "Upload or capture an image of your plant to detect diseases",
-      uploadImage: "Upload Image",
+      title: "Crop Disease Detection",
+      subtitle: "Upload or take a photo of the affected plant.",
+      uploadPhoto: "Upload Photo",
       takePhoto: "Take Photo",
+      results: "Results",
+      diagnosis: "DIAGNOSIS",
+      earlyBlight: "Early Blight",
+      diagnosisText: "The analysis indicates a high probability of Early Blight, a common fungal disease affecting tomatoes and potatoes. Key indicators are the dark, concentric lesions on the leaves.",
+      suggestedSolutions: "Suggested Solutions",
+      solutions: [
+        {
+          icon: "science",
+          title: "Fungicide Application",
+          description: "Apply a copper-based or chlorothalonil fungicide. Follow the product label for application rates and timing."
+        },
+        {
+          icon: "eco",
+          title: "Cultural Practices",
+          description: "Improve air circulation by pruning and spacing plants. Water at the base of the plant to avoid wet foliage."
+        },
+        {
+          icon: "recycling",
+          title: "Sanitation",
+          description: "Remove and destroy infected plant debris at the end of the season to reduce fungal overwintering."
+        }
+      ],
       analyzing: "Analyzing image...",
       noImageSelected: "No image selected",
       analysisComplete: "Analysis Complete",
       diseaseDetected: "Disease Detected",
       healthyPlant: "Healthy Plant",
       confidence: "Confidence",
-      recommendations: "Treatment Recommendations",
-      prevention: "Prevention Tips",
-      tryAnother: "Analyze Another Image",
+      recommendations: "Recommendations",
+      prevention: "Prevention",
+      tryAnother: "Try Another Image",
       sampleResults: {
         disease: "Leaf Spot Disease",
         confidence: "92%",
         severity: "Moderate",
         treatment: [
           "Remove affected leaves immediately",
-          "Apply copper-based fungicide spray",
-          "Improve air circulation around plants",
-          "Avoid overhead watering"
+          "Apply copper-based fungicide",
+          "Improve air circulation around plants"
         ],
         prevention: [
           "Plant disease-resistant varieties",
@@ -45,10 +105,32 @@ const DiseaseDetection: React.FC<DiseaseDetectionProps> = ({ language }) => {
       }
     },
     hi: {
-      title: "पौधों की बीमारी की पहचान",
-      subtitle: "बीमारियों का पता लगाने के लिए अपने पौधे की तस्वीर अपलोड या कैप्चर करें",
-      uploadImage: "तस्वीर अपलोड करें",
+      title: "फसल रोग पहचान",
+      subtitle: "प्रभावित पौधे की फोटो अपलोड करें या खींचें।",
+      uploadPhoto: "फोटो अपलोड करें",
       takePhoto: "फोटो लें",
+      results: "परिणाम",
+      diagnosis: "निदान",
+      earlyBlight: "अर्ली ब्लाइट",
+      diagnosisText: "विश्लेषण से पता चलता है कि टमाटर और आलू को प्रभावित करने वाले एक सामान्य फंगल रोग अर्ली ब्लाइट की उच्च संभावना है। मुख्य संकेत पत्तियों पर काले, संकेंद्रित घाव हैं।",
+      suggestedSolutions: "सुझाए गए समाधान",
+      solutions: [
+        {
+          icon: "science",
+          title: "फफूंदनाशक का उपयोग",
+          description: "तांबे आधारित या क्लोरोथैलोनिल फफूंदनाशक लगाएं। आवेदन दर और समय के लिए उत्पाद लेबल का पालन करें।"
+        },
+        {
+          icon: "eco",
+          title: "सांस्कृतिक प्रथाएं",
+          description: "पौधों को छाँटकर और उनके बीच उचित दूरी रखकर हवा के संचार में सुधार करें। गीली पत्तियों से बचने के लिए पौधे के आधार पर पानी दें।"
+        },
+        {
+          icon: "recycling",
+          title: "स्वच्छता",
+          description: "फंगस को ओवरविन्टरिंग से रोकने के लिए मौसम के अंत में संक्रमित पौधे के अवशेषों को हटा दें और नष्ट कर दें।"
+        }
+      ],
       analyzing: "तस्वीर का विश्लेषण...",
       noImageSelected: "कोई तस्वीर चुनी नहीं गई",
       analysisComplete: "विश्लेषण पूरा",
@@ -77,19 +159,41 @@ const DiseaseDetection: React.FC<DiseaseDetectionProps> = ({ language }) => {
       }
     },
     pa: {
-      title: "ਪੌਧਿਆਂ ਦੀ ਬਿਮਾਰੀ ਦੀ ਪਛਾਣ",
-      subtitle: "ਬਿਮਾਰੀਆਂ ਦਾ ਪਤਾ ਲਗਾਉਣ ਲਈ ਆਪਣੇ ਪੌਧੇ ਦੀ ਤਸਵੀਰ ਅਪਲੋਡ ਜਾਂ ਕੈਪਚਰ ਕਰੋ",
-      uploadImage: "ਤਸਵੀਰ ਅਪਲੋਡ ਕਰੋ",
+      title: "ਫਸਲ ਦੀ ਬਿਮਾਰੀ ਦੀ ਪਛਾਣ",
+      subtitle: "ਪ੍ਰਭਾਵਿਤ ਪੌਦੇ ਦੀ ਫੋਟੋ ਅਪਲੋਡ ਕਰੋ ਜਾਂ ਖਿੱਚੋ।",
+      uploadPhoto: "ਫੋਟੋ ਅਪਲੋਡ ਕਰੋ",
       takePhoto: "ਫੋਟੋ ਲਓ",
-      analyzing: "ਤਸਵੀਰ ਦਾ ਵਿਸ਼ਲੇਸ਼ਣ...",
+      results: "ਨਤੀਜੇ",
+      diagnosis: "ਡਾਇਗਨੋਸਿਸ",
+      earlyBlight: "ਅਰਲੀ ਬਲਾਈਟ",
+      diagnosisText: "ਵਿਸ਼ਲੇਸ਼ਣ ਇਹ ਦਰਸਾਉਂਦਾ ਹੈ ਕਿ ਟਮਾਟਰ ਅਤੇ ਆਲੂ ਨੂੰ ਪ੍ਰਭਾਵਿਤ ਕਰਨ ਵਾਲੇ ਇੱਕ ਆਮ ਫੰਗਲ ਰੋਗ ਅਰਲੀ ਬਲਾਈਟ ਦੀ ਉੱਚ ਸੰਭਾਵਨਾ ਹੈ। ਮੁੱਖ ਸੰਕੇਤ ਪੱਤੀਆਂ 'ਤੇ ਹਨੇਰੇ, ਕੇਂਦਰਿਤ ਘਾਉ ਹਨ।",
+      suggestedSolutions: "ਸੁਝਾਏ ਗਏ ਹੱਲ",
+      solutions: [
+        {
+          icon: "science",
+          title: "ਫੰਗੀਸਾਈਡ ਐਪਲੀਕੇਸ਼ਨ",
+          description: "ਤਾਂਬੇ-ਅਧਾਰਿਤ ਜਾਂ ਕਲੋਰੋਥੈਲੋਨਿਲ ਫੰਗੀਸਾਈਡ ਲਗਾਓ। ਐਪਲੀਕੇਸ਼ਨ ਦਰਾਂ ਅਤੇ ਸਮੇਂ ਲਈ ਉਤਪਾਦ ਲੇਬਲ ਦੀ ਪਾਲਣਾ ਕਰੋ।"
+        },
+        {
+          icon: "eco",
+          title: "ਸਭਿਆਚਾਰਕ ਅਭਿਆਸ",
+          description: "ਪੌਦਿਆਂ ਨੂੰ ਕੱਟ ਕੇ ਅਤੇ ਉਹਨਾਂ ਵਿਚਕਾਰ ਥਾਂ ਛੱਡ ਕੇ ਹਵਾ ਦੇ ਪ੍ਰਵਾਹ ਵਿੱਚ ਸੁਧਾਰ ਕਰੋ। ਗਿੱਲੇ ਪੱਤਿਆਂ ਤੋਂ ਬਚਣ ਲਈ ਪੌਦੇ ਦੇ ਅਧਾਰ ਤੇ ਪਾਣੀ ਦਿਓ।"
+        },
+        {
+          icon: "recycling",
+          title: "ਸਫਾਈ",
+          description: "ਫੰਗਲ ਦੇ ਓਵਰਵਿੰਟਰਿੰਗ ਨੂੰ ਘਟਾਉਣ ਲਈ ਸੀਜ਼ਨ ਦੇ ਅੰਤ ਵਿੱਚ ਲਾਗ ਵਾਲੇ ਪੌਦੇ ਦੇ ਮਲਬੇ ਨੂੰ ਹਟਾਓ ਅਤੇ ਨਸ਼ਟ ਕਰੋ।"
+        }
+      ],
+      analyzing: "ਤਸਵੀਰ ਦਾ ਵਿਸ਼ਲੇਸ਼ਣ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...",
       noImageSelected: "ਕੋਈ ਤਸਵੀਰ ਚੁਣੀ ਨਹੀਂ ਗਈ",
       analysisComplete: "ਵਿਸ਼ਲੇਸ਼ਣ ਪੂਰਾ",
       diseaseDetected: "ਬਿਮਾਰੀ ਦਾ ਪਤਾ ਲੱਗਿਆ",
       healthyPlant: "ਸਿਹਤਮੰਦ ਪੌਧਾ",
       confidence: "ਭਰੋਸਾ",
-      recommendations: "ਇਲਾਜ ਦੀਆਂ ਸਿਫਾਰਸ਼ਾਂ",
+      recommendations: "ਸਿਫਾਰਸ਼ਾਂ",
       prevention: "ਰੋਕਥਾਮ ਦੇ ਤਰੀਕੇ",
-      tryAnother: "ਕਿਸੇ ਹੋਰ ਤਸਵੀਰ ਦਾ ਵਿਸ਼ਲੇਸ਼ਣ ਕਰੋ",
+      tryAnother: "ਕੋਈ ਹੋਰ ਤਸਵੀਰ ਦਾ ਵਿਸ਼ਲੇਸ਼ਣ ਕਰੋ",
       sampleResults: {
         disease: "ਪੱਤੇ ਦੇ ਧੱਬੇ ਦੀ ਬਿਮਾਰੀ",
         confidence: "92%",
@@ -110,212 +214,174 @@ const DiseaseDetection: React.FC<DiseaseDetectionProps> = ({ language }) => {
     }
   };
 
+  // Get translations for the current language, fallback to English
   const t = translations[language as keyof typeof translations] || translations.en;
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setIsAnalyzing(true);
       const reader = new FileReader();
       reader.onload = (e) => {
         setSelectedImage(e.target?.result as string);
-        setAnalysisResult(null);
+        // Simulate analysis completion after a short delay
+        setTimeout(() => {
+          setIsAnalyzing(false);
+          setAnalysisComplete(true);
+        }, 2000);
+      };
+      reader.onerror = () => {
+        setIsAnalyzing(false);
+        alert('Error reading the file');
       };
       reader.readAsDataURL(file);
     }
-  };
+  }, []);
 
-  const handleCameraCapture = () => {
-    // Simulate camera capture
-    alert("Camera functionality would be implemented with device camera access in a real application");
-  };
-
-  const analyzeImage = async () => {
-    if (!selectedImage) return;
-    
-    setIsAnalyzing(true);
-    
-    // Simulate AI analysis delay
-    setTimeout(() => {
-      // Mock analysis result
-      setAnalysisResult({
-        diseaseDetected: true,
-        disease: t.sampleResults.disease,
-        confidence: t.sampleResults.confidence,
-        severity: t.sampleResults.severity,
-        treatment: t.sampleResults.treatment,
-        prevention: t.sampleResults.prevention
-      });
-      setIsAnalyzing(false);
-    }, 3000);
-  };
-
-  const resetAnalysis = () => {
-    setSelectedImage(null);
-    setAnalysisResult(null);
-    setIsAnalyzing(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
+  const handleTakePhoto = useCallback(() => {
+    console.log("Take photo functionality to be implemented");
+  }, []);
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="relative flex h-auto min-h-screen w-full flex-col bg-slate-50">
+      <div className="flex flex-col gap-6 pb-24">
         {/* Header */}
-        <div className="bg-gradient-to-r from-green-500 to-blue-500 text-white p-6">
-          <h2 className="text-2xl font-bold mb-2">{t.title}</h2>
-          <p className="opacity-90">{t.subtitle}</p>
-        </div>
+        <header className="sticky top-0 z-10 flex items-center justify-between bg-slate-50/80 p-4 pb-2 backdrop-blur-sm">
+          <button 
+            onClick={onBack}
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-transparent text-green-950 transition-colors hover:bg-green-100"
+          >
+            <span className="material-symbols-outlined">arrow_back</span>
+          </button>
+          <h1 className="text-2xl font-bold leading-tight tracking-tight text-green-950">{t.title}</h1>
+          <button className="flex h-10 w-10 items-center justify-center rounded-full bg-transparent text-green-950 transition-colors hover:bg-green-100">
+            <span className="material-symbols-outlined">more_vert</span>
+          </button>
+        </header>
 
-        <div className="p-6 space-y-6">
-          {/* Image Upload Section */}
-          {!selectedImage && (
-            <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center">
-              <div className="space-y-4">
-                <div className="flex justify-center space-x-4">
-                  <button
+        {/* Main Content */}
+        <main className="flex flex-col gap-8 px-4">
+          {isAnalyzing ? (
+            <div className="flex flex-col items-center justify-center py-16">
+              <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-green-600 border-t-transparent"></div>
+              <p className="text-green-950">{t.analyzing}</p>
+            </div>
+          ) : !analysisComplete ? (
+            <div className="flex flex-col gap-6">
+              <div className="rounded-2xl bg-white p-6 shadow-sm">
+                <h2 className="mb-1 text-center text-lg font-bold">Detect Plant Disease</h2>
+                <p className="mb-6 text-center text-sm text-gray-500">{t.subtitle}</p>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <button 
+                    type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg transition-colors"
+                    className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-green-500 p-4 text-green-600 transition-colors hover:bg-green-50"
                   >
-                    <Upload size={20} />
-                    <span>{t.uploadImage}</span>
+                    <span className="material-symbols-outlined text-3xl">upload_file</span>
+                    <span className="font-medium">{t.uploadPhoto}</span>
+                    <input 
+                      type="file" 
+                      ref={fileInputRef}
+                      className="hidden" 
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                    />
                   </button>
-                  <button
-                    onClick={handleCameraCapture}
-                    className="flex items-center space-x-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors"
+                  
+                  <button 
+                    onClick={handleTakePhoto}
+                    className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-green-500 p-4 text-green-600 transition-colors hover:bg-green-50"
                   >
-                    <Camera size={20} />
-                    <span>{t.takePhoto}</span>
+                    <span className="material-symbols-outlined text-3xl">photo_camera</span>
+                    <span className="font-medium">{t.takePhoto}</span>
                   </button>
                 </div>
-                <p className="text-gray-500">{t.noImageSelected}</p>
               </div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
             </div>
-          )}
-
-          {/* Selected Image Display */}
-          {selectedImage && (
-            <div className="space-y-4">
-              <div className="relative">
-                <img
-                  src={selectedImage}
-                  alt="Selected plant"
-                  className="w-full max-w-md mx-auto rounded-lg shadow-sm"
-                />
-                <button
-                  onClick={resetAnalysis}
-                  className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full transition-colors"
-                >
-                  <X size={16} />
-                </button>
-              </div>
-
-              {!isAnalyzing && !analysisResult && (
-                <div className="text-center">
-                  <button
-                    onClick={analyzeImage}
-                    className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
-                  >
-                    Analyze for Disease
-                  </button>
+          ) : (
+            <div className="flex flex-col gap-6">
+              {selectedImage && (
+                <div className="rounded-2xl bg-white p-4 shadow-sm">
+                  <div className="overflow-hidden rounded-xl">
+                    <img 
+                      src={selectedImage} 
+                      alt="Uploaded plant" 
+                      className="h-48 w-full object-cover"
+                    />
+                  </div>
+                  
+                  <div className="mt-4">
+                    <div className="mb-6">
+                      <h3 className="mb-3 text-xl font-semibold">{t.results}</h3>
+                      <div className="rounded-xl bg-green-50 p-4">
+                        <h4 className="text-sm font-medium uppercase tracking-wider text-green-600">{t.diagnosis}</h4>
+                        <p className="mt-1 text-lg font-semibold text-green-950">{t.earlyBlight}</p>
+                        <p className="mt-2 text-sm text-green-900">{t.diagnosisText}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-6">
+                      <h4 className="mb-3 text-sm font-medium uppercase tracking-wider text-green-600">{t.suggestedSolutions}</h4>
+                      <div className="space-y-3">
+                        {t.solutions.map((solution: Solution, index: number) => (
+                          <div key={index} className="flex items-start gap-3 rounded-xl bg-white p-4 shadow-sm">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-50">
+                              <span className="material-symbols-outlined text-blue-500">
+                                {solution.icon}
+                              </span>
+                            </div>
+                            <div>
+                              <h5 className="font-semibold text-green-900">{solution.title}</h5>
+                              <p className="mt-1 text-sm text-green-800">{solution.description}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <button
+                      onClick={() => {
+                        setSelectedImage(null);
+                        setAnalysisComplete(false);
+                      }}
+                      className="w-full rounded-xl bg-green-600 px-6 py-3 font-medium text-white transition-colors hover:bg-green-700"
+                    >
+                      {t.tryAnother}
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
           )}
-
-          {/* Analysis Loading */}
-          {isAnalyzing && (
-            <div className="text-center py-8">
-              <Loader className="animate-spin mx-auto mb-4 text-green-500" size={48} />
-              <p className="text-lg font-semibold text-gray-700">{t.analyzing}</p>
-            </div>
-          )}
-
-          {/* Analysis Results */}
-          {analysisResult && (
-            <div className="space-y-6">
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <div className="flex items-center space-x-3 mb-4">
-                  {analysisResult.diseaseDetected ? (
-                    <AlertTriangle className="text-orange-500" size={24} />
-                  ) : (
-                    <CheckCircle className="text-green-500" size={24} />
-                  )}
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-800">{t.analysisComplete}</h3>
-                    <p className="text-sm text-gray-600">
-                      {analysisResult.diseaseDetected ? t.diseaseDetected : t.healthyPlant}
-                    </p>
-                  </div>
-                </div>
-
-                {analysisResult.diseaseDetected && (
-                  <div className="grid md:grid-cols-3 gap-4 mb-4">
-                    <div className="bg-white rounded-lg p-3 text-center">
-                      <p className="text-sm text-gray-600">Disease</p>
-                      <p className="font-semibold">{analysisResult.disease}</p>
-                    </div>
-                    <div className="bg-white rounded-lg p-3 text-center">
-                      <p className="text-sm text-gray-600">{t.confidence}</p>
-                      <p className="font-semibold text-green-600">{analysisResult.confidence}</p>
-                    </div>
-                    <div className="bg-white rounded-lg p-3 text-center">
-                      <p className="text-sm text-gray-600">Severity</p>
-                      <p className="font-semibold text-orange-500">{analysisResult.severity}</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {analysisResult.diseaseDetected && (
-                <div className="grid md:grid-cols-2 gap-6">
-                  {/* Treatment Recommendations */}
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <h4 className="font-semibold text-blue-800 mb-3">{t.recommendations}</h4>
-                    <ul className="space-y-2">
-                      {analysisResult.treatment.map((item: string, index: number) => (
-                        <li key={index} className="flex items-start space-x-2">
-                          <CheckCircle size={16} className="text-blue-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-700">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Prevention Tips */}
-                  <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                    <h4 className="font-semibold text-purple-800 mb-3">{t.prevention}</h4>
-                    <ul className="space-y-2">
-                      {analysisResult.prevention.map((item: string, index: number) => (
-                        <li key={index} className="flex items-start space-x-2">
-                          <CheckCircle size={16} className="text-purple-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-700">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              )}
-
-              <div className="text-center">
-                <button
-                  onClick={resetAnalysis}
-                  className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-colors"
-                >
-                  {t.tryAnother}
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+        </main>
       </div>
+      
+      {/* Bottom Navigation */}
+      <footer className="fixed bottom-0 left-0 right-0 z-10 mt-auto bg-white/80 backdrop-blur-sm">
+        <nav className="flex justify-around border-t border-green-100 px-4 py-2">
+          <button className="flex flex-col items-center p-2 text-green-600">
+            <span className="material-symbols-outlined">home</span>
+            <span className="text-xs">Home</span>
+          </button>
+          <button className="flex flex-col items-center p-2 text-green-600">
+            <span className="material-symbols-outlined">search</span>
+            <span className="text-xs">Search</span>
+          </button>
+          <button className="flex flex-col items-center p-2 text-green-600">
+            <span className="material-symbols-outlined">add_circle</span>
+            <span className="text-xs">Scan</span>
+          </button>
+          <button className="flex flex-col items-center p-2 text-green-600">
+            <span className="material-symbols-outlined">notifications</span>
+            <span className="text-xs">Alerts</span>
+          </button>
+          <button className="flex flex-col items-center p-2 text-green-600">
+            <span className="material-symbols-outlined">person</span>
+            <span className="text-xs">Profile</span>
+          </button>
+        </nav>
+      </footer>
     </div>
   );
 };

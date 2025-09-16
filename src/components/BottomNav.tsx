@@ -1,16 +1,9 @@
 import React from 'react';
-import { 
-  Home, 
-  Camera, 
-  TrendingUp, 
-  MessageCircle, 
-  BarChart3
-} from 'lucide-react';
 
 interface BottomNavProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
-  language: string;
+  language: 'en' | 'hi' | 'pa';
 }
 
 const BottomNav: React.FC<BottomNavProps> = ({ 
@@ -21,63 +14,54 @@ const BottomNav: React.FC<BottomNavProps> = ({
   const translations = {
     en: {
       home: "Home",
-      disease: "Disease",
+      detect: "Detect",
       soil: "Soil",
       advice: "Advice",
       market: "Market"
     },
     hi: {
       home: "होम",
-      disease: "रोग",
+      detect: "जांच",
       soil: "मिट्टी",
       advice: "सलाह",
       market: "बाजार"
     },
     pa: {
       home: "ਘਰ",
-      disease: "ਰੋਗ",
+      detect: "ਪਤਾ",
       soil: "ਮਿੱਟੀ",
       advice: "ਸਲਾਹ",
       market: "ਮਾਰਕੀਟ"
     }
   };
 
-  const t = translations[language as keyof typeof translations] || translations.en;
+  const t = translations[language] || translations.en;
 
   const navItems = [
-    { id: 'dashboard', label: t.home, icon: Home },
-    { id: 'disease-detection', label: t.disease, icon: Camera },
-    { id: 'soil-analysis', label: t.soil, icon: TrendingUp },
-    { id: 'chat', label: t.advice, icon: MessageCircle },
-    { id: 'market-prices', label: t.market, icon: BarChart3 }
+    { id: 'dashboard', label: t.home, icon: 'home' },
+    { id: 'disease-detection', label: t.detect, icon: 'document_scanner' },
+    { id: 'soil', label: t.soil, icon: 'grass' },
+    { id: 'chat', label: t.advice, icon: 'lightbulb' },
+    { id: 'market-prices', label: t.market, icon: 'storefront' },
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
-      <div className="flex items-center justify-around py-2 px-4">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = activeTab === item.id;
-          
-          return (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`flex flex-col items-center justify-center py-2 px-3 min-w-0 flex-1 transition-colors duration-200 ${
-                isActive ? 'text-green-600' : 'text-gray-500'
-              }`}
-            >
-              <div className={`p-1 ${isActive ? 'text-green-600' : 'text-gray-500'}`}>
-                <Icon size={20} />
-              </div>
-              <span className={`text-xs font-medium mt-1 ${
-                isActive ? 'text-green-600' : 'text-gray-500'
-              }`}>
-                {item.label}
-              </span>
-            </button>
-          );
-        })}
+    <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-green-100 z-50">
+      <div className="flex justify-around px-1 py-1">
+        {navItems.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => setActiveTab(item.id)}
+            className={`flex flex-col items-center justify-center p-1.5 rounded-lg transition-colors w-full ${
+              activeTab === item.id
+                ? 'text-green-950 bg-green-50'
+                : 'text-green-600 hover:bg-green-50'
+            }`}
+          >
+            <span className="material-symbols-outlined text-xl">{item.icon}</span>
+            <span className="text-[10px] font-medium mt-0.5">{item.label}</span>
+          </button>
+        ))}
       </div>
     </nav>
   );
