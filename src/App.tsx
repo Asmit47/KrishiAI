@@ -3,11 +3,12 @@ import BottomNav from './components/BottomNav';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import DiseaseDetection from './components/DiseaseDetection';
-import ChatAssistant from './components/ChatAssistant';
 import CropRecommendations from './components/CropRecommendations';
 import SoilAssessment from './components/SoilAssessment';
 import Marketplace from './components/Marketplace';
 import AIAdviceAssistant from './components/AIAdviceAssistant';
+import { ChatWidgetProvider } from './components/chat/chat-widget-provider';
+import { FloatingChatButton } from './components/chat/floating-chat-button';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -67,28 +68,33 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Header language={language} setLanguage={setLanguage} />
-      <main className="flex-1 pb-16">
-        {renderContent()}
-      </main>
+    <ChatWidgetProvider language={language}>
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        <Header language={language} setLanguage={setLanguage} />
+        <main className="flex-1 pb-16">
+          {renderContent()}
+        </main>
 
-      {/* Bottom Navigation */}
-      <BottomNav
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        language={language}
-      />
+        {/* Bottom Navigation */}
+        <BottomNav
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          language={language}
+        />
 
-      {/* Offline Indicator */}
-      {!isOnline && (
-        <div className="fixed bottom-20 left-4 right-4 bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-lg z-50">
-          <p className="text-sm font-medium text-center">
-            You're currently offline. Some features may be limited.
-          </p>
-        </div>
-      )}
-    </div>
+        {/* Floating Chat Button */}
+        <FloatingChatButton />
+
+        {/* Offline Indicator */}
+        {!isOnline && (
+          <div className="fixed bottom-20 left-4 right-4 bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-lg z-50">
+            <p className="text-sm font-medium text-center">
+              You're currently offline. Some features may be limited.
+            </p>
+          </div>
+        )}
+      </div>
+    </ChatWidgetProvider>
   );
 }
 
