@@ -1,4 +1,5 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { fetchWeatherByCoords, fetchWeatherByCity, type WeatherData } from '../services/weatherService';
 
 type Language = 'en' | 'hi' | 'pa';
 
@@ -10,10 +11,61 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps> = ({ onNavigateToTab, language }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [loadingWeather, setLoadingWeather] = useState<boolean>(true);
+  const [weatherError, setWeatherError] = useState<string | null>(null);
+
   useEffect(() => {
-    // Any other side effects for Dashboard can go here
+    let cancelled = false;
+    const loadWeather = async () => {
+      setLoadingWeather(true);
+      setWeatherError(null);
+      try {
+        await new Promise<void>((resolve) => {
+          if (!('geolocation' in navigator)) {
+            resolve();
+            return;
+          }
+          navigator.geolocation.getCurrentPosition(
+            async (pos) => {
+              try {
+                const data = await fetchWeatherByCoords(pos.coords.latitude, pos.coords.longitude);
+                if (!cancelled) setWeather(data);
+              } catch (e: any) {
+                // Fallback to Delhi on API error
+                try {
+                  const data = await fetchWeatherByCity('Delhi');
+                  if (!cancelled) setWeather(data);
+                } catch (err: any) {
+                  if (!cancelled) setWeatherError(err?.message || 'Failed to load weather');
+                }
+              } finally {
+                if (!cancelled) setLoadingWeather(false);
+              }
+            },
+            async () => {
+              // Permission denied or error -> fallback to Delhi
+              try {
+                const data = await fetchWeatherByCity('Delhi');
+                if (!cancelled) setWeather(data);
+              } catch (err: any) {
+                if (!cancelled) setWeatherError(err?.message || 'Failed to load weather');
+              } finally {
+                if (!cancelled) setLoadingWeather(false);
+              }
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 }
+          );
+        });
+      } catch (err: any) {
+        if (!cancelled) setWeatherError(err?.message || 'Failed to load weather');
+      } finally {
+        if (!cancelled) setLoadingWeather(false);
+      }
+    };
+    loadWeather();
     return () => {
-      // Cleanup if needed
+      cancelled = true;
     };
   }, []);
 
@@ -26,7 +78,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToTab, language }) => {
       temperature: 'Temperature',
       wind: 'Wind',
       humidity: 'Humidity',
-      uvIndex: 'UV Index',
+      condition: 'Condition',
       soilHealthDetails: 'Soil Health Details',
       phLevel: 'pH Level',
       moisture: 'Moisture',
@@ -44,7 +96,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToTab, language }) => {
       temperature: 'तापमान',
       wind: 'हवा',
       humidity: 'नमी',
-      uvIndex: 'यूवी सूचकांक',
+      condition: 'मौसम की स्थिति',
       soilHealthDetails: 'मिट्टी स्वास्थ्य विवरण',
       phLevel: 'पीएच स्तर',
       moisture: 'नमी',
@@ -62,7 +114,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToTab, language }) => {
       temperature: 'ਤਾਪਮਾਨ',
       wind: 'ਹਵਾ',
       humidity: 'ਨਮੀ',
-      uvIndex: 'ਯੂਵੀ ਸੂਚਕਾਂਕ',
+      condition: 'ਮੌਸਮ ਦੀ ਹਾਲਤ',
       soilHealthDetails: 'ਮਿੱਟੀ ਸਿਹਤ ਵੇਰਵਾ',
       phLevel: 'ਪੀਐੱਚ ਪੱਧਰ',
       moisture: 'ਨਮੀ',
@@ -129,12 +181,22 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToTab, language }) => {
           <section className="flex flex-col gap-4">
             <h2 className="text-xl font-bold leading-tight tracking-tight text-green-950">{t.weatherDetails}</h2>
             <div className="grid grid-cols-2 gap-4">
+              {loadingWeather && (
+                <div className="col-span-2 rounded-2xl bg-white p-5 shadow-sm">
+                  <p className="text-sm text-green-700">Loading current weather...</p>
+                </div>
+              )}
+              {weatherError && (
+                <div className="col-span-2 rounded-2xl bg-red-50 p-5 shadow-sm">
+                  <p className="text-sm font-medium text-red-700">{weatherError}</p>
+                </div>
+              )}
               <div className="flex flex-col gap-4 rounded-2xl bg-white p-5 shadow-sm">
                 <div className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-green-700">device_thermostat</span>
                   <p className="text-sm font-medium text-green-700">{t.temperature}</p>
                 </div>
-                <p className="text-3xl font-bold text-green-950">28°C</p>
+                <p className="text-3xl font-bold text-green-950">{weather ? `${Math.round(weather.temp)}°C` : '--'}</p>
               </div>
               
               <div className="flex flex-col gap-4 rounded-2xl bg-white p-5 shadow-sm">
@@ -142,7 +204,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToTab, language }) => {
                   <span className="material-symbols-outlined text-green-700">air</span>
                   <p className="text-sm font-medium text-green-700">{t.wind}</p>
                 </div>
-                <p className="text-3xl font-bold text-green-950">12 km/h</p>
+                <p className="text-3xl font-bold text-green-950">{weather ? `${Math.round(weather.windSpeed * 3.6)} km/h` : '--'}</p>
               </div>
               
               <div className="flex flex-col gap-4 rounded-2xl bg-white p-5 shadow-sm">
@@ -150,15 +212,15 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToTab, language }) => {
                   <span className="material-symbols-outlined text-green-700">water_drop</span>
                   <p className="text-sm font-medium text-green-700">{t.humidity}</p>
                 </div>
-                <p className="text-3xl font-bold text-green-950">65%</p>
+                <p className="text-3xl font-bold text-green-950">{weather ? `${Math.round(weather.humidity)}%` : '--'}</p>
               </div>
               
               <div className="flex flex-col gap-4 rounded-2xl bg-white p-5 shadow-sm">
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-green-700">wb_sunny</span>
-                  <p className="text-sm font-medium text-green-700">{t.uvIndex}</p>
+                  <span className="material-symbols-outlined text-green-700">cloud</span>
+                  <p className="text-sm font-medium text-green-700">{t.condition}</p>
                 </div>
-                <p className="text-3xl font-bold text-green-950">{t.high}</p>
+                <p className="text-lg font-semibold text-green-950">{weather ? `${weather.description} ${weather.city ? `• ${weather.city}` : ''}` : '--'}</p>
               </div>
             </div>
           </section>
